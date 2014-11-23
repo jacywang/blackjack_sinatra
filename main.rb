@@ -4,6 +4,9 @@ require 'pry'
 
 set :sessions, true
 
+BLACKJACK_AMOUNT = 21
+DEALER_MIN_HIT = 17
+
 helpers do 
   def calculate_total(cards) 
   # [['H', '3'], ['S', 'Q'], ... ]
@@ -22,7 +25,7 @@ helpers do
 
     #correct for Aces
     arr.select{|e| e == "ace"}.count.times do
-      total -= 10 if total > 21
+      total -= 10 if total > BLACKJACK_AMOUNT
     end
 
     total
@@ -33,18 +36,18 @@ helpers do
   end
 
   def blackjack?(cards)
-    calculate_total(cards) == 21
+    calculate_total(cards) == BLACKJACK_AMOUNT
   end
 
   def busted?(cards)
-    calculate_total(cards) > 21
+    calculate_total(cards) > BLACKJACK_AMOUNT
   end
 
   def dealer_hit_result
     player_cards_total = calculate_total(session[:player_cards])
     dealer_cards_total = calculate_total(session[:dealer_cards])
 
-    if dealer_cards_total >= 17
+    if dealer_cards_total >= DEALER_MIN_HIT
       @show_dealer_hit_button = false
       @play_again = true
       if busted?(session[:dealer_cards])
