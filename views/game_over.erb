@@ -1,3 +1,8 @@
-<h3>You have amassed a final amount of $<%=session[:player_money]%>!</h3>
-<p>Now that you've honed your blackjack skills, there's nothing left to do except go to Vegas.</p>
+<% if session[:player_money] > 0 %>
+  <h3>You have amassed a final amount of $<%=session[:player_money]%>!</h3>
+  <p>Now that you've honed your blackjack skills, there's nothing left to do except go to Vegas.</p>
+<% else %>
+  <h3>You just lost all your money! What a pity!</h3>
+  <p>Take a break and come back again!</p>
+<% end %>
 <a href="/new_player">Start Over</a>

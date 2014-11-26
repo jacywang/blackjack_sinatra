@@ -6,6 +6,7 @@ set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
+INITIAL_AMOUNT = 500
 
 helpers do 
   def calculate_total(cards) 
@@ -114,17 +115,27 @@ post '/new_player' do
     halt erb(:new_player)
   end
   session[:player_name] = params[:player_name]
-  session[:player_money] = 500
+  session[:player_money] = INITIAL_AMOUNT
   redirect '/bet'
 end
 
 get '/bet' do
-  erb :bet
+  if session[:player_money] > 0
+    erb :bet
+  else
+    redirect '/game_over'
+  end
 end
 
 post '/bet' do
-  session[:bet_amount] = params[:bet_amount].to_i
-  redirect '/game'
+  bet_amount = params[:bet_amount].to_i
+  if bet_amount > 0 && bet_amount <= session[:player_money]
+    session[:bet_amount] = bet_amount
+    redirect '/game'
+  else
+    @error = "The amount entered is invalid. Please bet again."
+    halt erb(:bet)
+  end
 end
 
 get '/game' do 
