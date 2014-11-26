@@ -1,3 +1,12 @@
+<div id="game">
+
+<%if @loser %>
+  <div class="alert alert-error"><%=@loser%></div>
+<% end %>
+<%if @winner %>
+  <div class="alert alert-success"><%=@winner%></div>
+<% end %>
+  
 <% if @play_again %>
   <h4>
     Play again?
@@ -48,3 +57,4 @@
     <input type="submit" value="Stay" class="btn btn-warning" />
   </form>
 <% end %>
+</div>

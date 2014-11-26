@@ -46,20 +46,20 @@ helpers do
 
   def winner!(msg)
     session[:player_money] += session[:bet_amount]
-    @success = "#{msg} #{session[:player_name]} won! #{session[:player_name]} now has $#{session[:player_money]}."
+    @winner = "#{msg} #{session[:player_name]} won! #{session[:player_name]} now has $#{session[:player_money]}."
     @show_hit_or_stay_buttons = false
     @play_again = true
   end
 
   def loser!(msg)
     session[:player_money] -= session[:bet_amount]
-    @error = "#{msg} #{session[:player_name]} now has $#{session[:player_money]}."
+    @loser = "#{msg} #{session[:player_name]} now has $#{session[:player_money]}."
     @show_hit_or_stay_buttons = false
     @play_again = true
   end
 
   def tie!
-    @success = "It's a tie! #{session[:player_name]} now has $#{session[:player_money]}."
+    @winner = "It's a tie! #{session[:player_name]} now has $#{session[:player_money]}."
     @show_hit_or_stay_buttons = false
     @play_again = true
   end
@@ -159,18 +159,18 @@ post '/game/player/hit' do
 
   player_hit_blackjack_or_busted
 
-  erb :game
+  erb :game, layout: false  
 end
 
 post '/game/player/stay' do
-  @success = session[:player_name] +" has chosen to stay. It's Dealer's turn now." if calculate_total(session[:dealer_cards]) < DEALER_MIN_HIT
+  @winner = session[:player_name] +" has chosen to stay. It's Dealer's turn now." if calculate_total(session[:dealer_cards]) < DEALER_MIN_HIT
   @show_hit_or_stay_buttons =false
   @show_dealer_hit_button = true
   @show_dealer_first_card = true
 
   dealer_hit_result
 
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
